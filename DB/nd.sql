@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 14, 2019 at 08:18 PM
+-- Generation Time: Mar 14, 2019 at 10:24 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   `Creator` varchar(80) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `fk_userEmail` (`Creator`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `event`
@@ -45,7 +45,12 @@ CREATE TABLE IF NOT EXISTS `event` (
 
 INSERT INTO `event` (`Name`, `Date_and_time`, `Place`, `ID`, `Creator`) VALUES
 ('kazkoks ivykis', '2019-03-28 18:00:00', 'Kaunas, studentu g. 48', 1, 'abc@abc.com'),
-('ivykis2', '2019-03-28 18:00:00', 'Kaunas, studentu g. 50', 2, 'abc@abc.com');
+('ivykis2', '2019-03-28 18:00:00', 'Kaunas, studentu g. 50', 2, 'abc@abc.com'),
+('naujass', '2019-03-30 13:30:00', 'Kaunas, studentu g. 50', 3, 'abc@abc.com'),
+('Naujas renginys', '2019-03-31 12:30:00', 'Kaunas, studentu g. 50', 6, 'abc@abc.com'),
+('Renginys', '2019-03-23 11:11:00', 'Kaunas, studentu g. 50', 7, 'abc@abc.com'),
+('Renginys', '2019-03-29 17:00:00', 'Kaunas, studentu g. 50', 8, 'vienas@vienas.com'),
+('Naujas2', '2019-04-27 12:00:00', 'Kaunas, studentu g. 50', 9, 'vienas@vienas.com');
 
 -- --------------------------------------------------------
 

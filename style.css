@@ -53,10 +53,7 @@ table{
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
-    padding: 15px;
-    background-color: black;
-    color: white;
-
+    padding: 1px;
 }
 th{
     background-color: black;
@@ -71,4 +68,45 @@ tr:nth-child(odd){
     background-color: #ffffff;
     color: black;
     text-align: center;
+}
+h2{
+    font-family: "Avant Garde", Avantgarde;
+    font-size: 92px;
+    padding: 80px 50px;
+    text-align: center;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+    color: #131313;
+    letter-spacing: .1em;
+    text-shadow:
+            1px -1px 0 #767676,
+            -1px 2px 1px #737272,
+            -2px 4px 1px #767474,
+            -3px 6px 1px #787777,
+            -4px 8px 1px #7b7a7a,
+            -5px 10px 1px #7f7d7d,
+            -6px 12px 1px #828181;
+}
+input[name="submit1"]{
+    width: 100px;
+    background: darkgreen;
+    color: white;
+    border: 1px;
+}
+input[type="name"], [type="date"], [type="time"], [type="place"]{
+    width: 300px;
+    background: aliceblue;
+    border:1px solid #aaa;
+    border-radius:30px;
+    padding:10px 5px;
+    font-size: 13px;
+    margin: 1px;
+    color:#333;
+    box-sizing:border-box;
+}
+input[name="logout"]{
+    width: 100px;
+    background: red;
+    color: white;
+    border: 1px;
 }
