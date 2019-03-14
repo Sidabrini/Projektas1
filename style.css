@@ -49,3 +49,26 @@ input[type = "submit"]{
     background: limegreen;
     color: black;
 }
+table{
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 15px;
+    background-color: black;
+    color: white;
+
+}
+th{
+    background-color: black;
+    color: white;
+}
+tr:nth-child(even){
+    background-color: #e3e3e3;
+    color: black;
+    text-align: center;
+}
+tr:nth-child(odd){
+    background-color: #ffffff;
+    color: black;
+    text-align: center;
+}
