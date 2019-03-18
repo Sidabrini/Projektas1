@@ -21,7 +21,7 @@
                 while ($row = $result->fetch_assoc()) {
                     if (password_verify($pass, $row["Password_hash"]) && $email === $row["Email"]) {
                         $_SESSION['user'] = $email;
-                        header('Location: login.php');
+                        header('Location: index.php');
                     }
                 }
             }
