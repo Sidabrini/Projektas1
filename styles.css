@@ -1,0 +1,87 @@
+body {
+    background-color: teal;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    font-family: Impact;
+}
+.login{
+    background: dodgerblue;
+    max-width: 400px;
+    padding: 40px 60px;
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    box-shadow: greenyellow;
+    border:1px solid #e3e3e3;
+}
+input{
+    background: aliceblue;
+    border:1px solid #aaa;
+    border-radius:30px;
+    padding:10px 5px;
+    font-size: 13px;
+    margin: 1px;
+    color:#333;
+    width: 100%;
+    box-sizing:border-box;
+}
+input[type = "submit"]{
+    background: darkgreen;
+    color: white;
+    border: 1px;
+}
+.alert{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius:6px;
+    color:#fff;
+    width: 100%;
+    text-align: center;
+}
+#error{
+    background: red;
+}
+#success{
+    background: limegreen;
+    color: black;
+}
+table{
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1px;
+}
+th{
+    background-color: black;
+    color: white;
+}
+tr:nth-child(even){
+    background-color: #e3e3e3;
+    color: black;
+    text-align: center;
+}
+tr:nth-child(odd){
+    background-color: #ffffff;
+    color: black;
+    text-align: center;
+}
+h2{
+    font-family: "Times New Roman";
+    font-size: 92px;
+    padding: 80px 50px;
+    text-align: center;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+    color: maroon;
+    letter-spacing: .1em;
+}
+input[name="logout"]{
+    width: 100px;
+    background: red;
+    color: white;
+    border: 1px;
+}
