@@ -3,18 +3,22 @@
 	require_once("config/database.php");
 	
 	class User{
-		public $ID;
+		public $name;
+        public $lastname;
+        public $birthdate;
 		public $email;
 		public $pass;
 		
-		public function set($ID, $email, $pass){
-			$this->ID = $ID;
+		public function set($name, $lastname, $birthdate, $email, $pass){
+			$this->name = $name;
+            $this->lastname = $lastname;
+            $this->birthdate = $birthdate;
 			$this->email = $email;
 			$this->pass = $pass;
 		}
 	}
 	
-	class Person{ /* klase */
+	class Person{
 	
 		private $user = array();
 		public $counter = 0;
@@ -48,7 +52,7 @@
 	
 	while ($row = $query->fetch_assoc()) {
         $user = new User;
-		$user->set($row["Name"], $row["Email"], $row["Password_hash"]);
+		$user->set($row["Name"], $row["Lastname"], $row["Birthdate"], $row["Email"], $row["Password_hash"]);
 		
 		$Person->Add($user);
     }

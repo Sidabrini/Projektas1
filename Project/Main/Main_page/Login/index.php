@@ -2,6 +2,7 @@
 	require_once("header.php");
 	require_once("config/database.php");
 	require_once("user.php");
+    require_once("event.php");
 ?>
 <!doctype html>
 <html>
@@ -21,14 +22,20 @@
 				if(!empty($_POST["email"]) && !empty($_POST["pass"])){ 
 					
 					$user = $Person->GetBy("email", $_POST["email"]);
+					$events = $Events->GetArray();
 					
 					if($user && password_verify($_POST["pass"], $user->pass)) {
 						echo "<div class=\"alert\" id=\"success\">Prisijungta</div>";
-						
+						$email = $_POST["email"];
 						$_SESSION["login"] = array();
 						$_SESSION["login"]["email"] = $_POST["email"];
-						$_SESSION["login"]["pass"] = $_POST["pass"];
-						
+                        $_SESSION["login"]["name"] = $user->name;
+                        $_SESSION["login"]["lastname"] = $user->lastname;
+                        $_SESSION["login"]["birthdate"] = $user->birthdate;
+                        if(1 == $Database->query("SELECT * FROM `admin` where email = $email"))
+                            $_SESSION["login"]["type"] = "admin";
+                        else
+                            $_SESSION["login"]["type"] = "user";
 						header("Location: ../index.php");
 					}
 					else { 

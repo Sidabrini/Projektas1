@@ -5,6 +5,8 @@
  * Date: 3/19/2019
  * Time: 6:06 PM
  */
+ session_start(); /*var_dump($_SESSION["login"]);*/
+if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +24,22 @@
 </div>
 
 <div class="topnav">
-    <a href="#" style="float:right">Register</a>
-    <a href="Login/index.php" style="float:right">Login</a>
+    <?php if(isset($_SESSION["login"]["email"])) {?>
+    <a href="?id=logout" style="float:right">Atsijungti</a>
+    <a href="#" style="float:right">Keisti slaptažodį</a>
+    <a href="#" style="float:right"><?php echo $_SESSION["login"]["email"]?></a>
+    <a href="events.php" style="float:right">Renginių sąrašas</a>
+    <?php }
+          else { ?>
+              <a href="#" style="float:right">Register</a>
+              <a href="Login/index.php" style="float:right">Login</a>
+          <?php }
+                if($ID == "logout") {
+				$_SESSION["login"] = NULL;
+				$_SESSION["events"] = NULL;
+ 				header("Location: ?id=");
+			    } ?>
+
 </div>
 
 <div class="row">
