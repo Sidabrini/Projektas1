@@ -25,18 +25,21 @@ if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
 
 <div class="topnav">
     <?php if(isset($_SESSION["login"]["email"])) {?>
-    <a href="?id=logout" style="float:right">Atsijungti</a>
-    <a href="#" style="float:right">Keisti slaptažodį</a>
-    <a href="#" style="float:right"><?php echo $_SESSION["login"]["email"]?></a>
-    <a href="events.php" style="float:right">Renginių sąrašas</a>
+        <a href="?id=logout" style="float:right">Atsijungti</a>
+        <a href="#" style="float:right">Keisti slaptažodį</a>
+        <a href="#" style="float:right"><?php echo $_SESSION["login"]["email"]?></a>
+        <a href="events.php" style="float:right">Renginių sąrašas</a>
+        <?php if($_SESSION["login"]["type"] === "admin"){?>
+            <a href="usersList.php" style="float:right">Vartotojų sąrašas</a>
+        <?php }?>
+
     <?php }
           else { ?>
               <a href="#" style="float:right">Register</a>
               <a href="Login/index.php" style="float:right">Login</a>
           <?php }
                 if($ID == "logout") {
-				$_SESSION["login"] = NULL;
-				$_SESSION["events"] = NULL;
+				session_destroy();
  				header("Location: ?id=");
 			    } ?>
 

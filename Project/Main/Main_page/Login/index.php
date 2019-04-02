@@ -23,7 +23,7 @@
 					
 					$user = $Person->GetBy("email", $_POST["email"]);
 					$events = $Events->GetArray();
-					
+
 					if($user && password_verify($_POST["pass"], $user->pass)) {
 						echo "<div class=\"alert\" id=\"success\">Prisijungta</div>";
 						$email = $_POST["email"];
@@ -32,7 +32,9 @@
                         $_SESSION["login"]["name"] = $user->name;
                         $_SESSION["login"]["lastname"] = $user->lastname;
                         $_SESSION["login"]["birthdate"] = $user->birthdate;
-                        if(1 == $Database->query("SELECT * FROM `admin` where email = $email"))
+                        $user_type = ($Database->query("SELECT * FROM admin where Email = '$user->email'")->fetch_assoc());
+
+                        if($user_type !== null)
                             $_SESSION["login"]["type"] = "admin";
                         else
                             $_SESSION["login"]["type"] = "user";
