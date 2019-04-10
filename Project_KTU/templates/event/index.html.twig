@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Renginiai{% endblock %}
+
+{% block body %}
+    <h1>Renginiai</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Place</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.Title }}</td>
+                <td>{{ event.Category }}</td>
+                <td>{{ event.City }}</td>
+                <td>{{ event.Address }}</td>
+                <td>{{ event.Place }}</td>
+                <td>{{ event.Date ? event.Date|date('Y-m-d') : '' }}</td>
+                <td>{{ event.Time ? event.Time|date('H:i:s') : '' }}</td>
+                <td>{{ event.Duration ? event.Duration|date('H:i:s') : '' }}</td>
+                <td>{{ event.Price }}</td>
+                <td>{{ event.Description }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('event_show', {'id': event.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary" href="{{ path('event_edit', {'id': event.id}) }}">edit</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-primary" href="{{ path('event_new') }}">Create new</a>
+    {% endif %}
+
+{% endblock %}

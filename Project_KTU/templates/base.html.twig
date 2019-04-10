@@ -1,0 +1,64 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}KTU renginiai{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('../templates/css/main.css') }}"/>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        {% endblock %}
+    </head>
+    <body>
+        {{ include('navbar.html.twig') }}
+        {% block body %}
+            <div class="row">
+                <div class="leftcolumn">
+                    <div class="card">
+                        <h2>TITLE HEADING</h2>
+                        <h5>Title description, Dec 7, 2017</h5>
+                        <div class="fakeimg" style="height:200px;">Image</div>
+                        <p>Some text..</p>
+                        <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                    </div>
+                    <div class="card">
+                        <h2>TITLE HEADING</h2>
+                        <h5>Title description, Sep 2, 2017</h5>
+                        <div class="fakeimg" style="height:200px;">Image</div>
+                        <p>Some text..</p>
+                        <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                    </div>
+                </div>
+                <div class="rightcolumn">
+                    <div class="card">
+                        <h2>About Me</h2>
+                        <div class="fakeimg" style="height:100px;">
+                            <img id="logo" class="logo-large" src="https://ktu.edu/wp-content/uploads/2016/03/KTU.svg" alt="">
+                        </div>
+                        <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+                    </div>
+                    <div class="card">
+                        <h3>Popular Post</h3>
+                        <div class="fakeimg"><p>Image</p></div>
+                        <div class="fakeimg"><p>Image</p></div>
+                        <div class="fakeimg"><p>Image</p></div>
+                    </div>
+                    <div class="card">
+                        <h3>Follow Me</h3>
+                        <p>Some text..</p>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        {% endblock %}
+        {% block footer %}
+            <div class="footer">
+                <h2>Footer</h2>
+            </div>
+        {% endblock %}
+    </body>
+</html>
