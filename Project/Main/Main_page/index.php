@@ -31,6 +31,7 @@ if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
         <a href="events.php" style="float:right">Renginių sąrašas</a>
         <?php if($_SESSION["login"]["type"] === "admin"){?>
             <a href="usersList.php" style="float:right">Vartotojų sąrašas</a>
+			<a href="event_add.php" style="float:right">Pridėti renginį</a>
         <?php }?>
 
     <?php }

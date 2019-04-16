@@ -25,6 +25,18 @@ input{
 	width:100%;
 	box-sizing:border-box;
 }
+
+textarea{
+	background:#ddd;
+	border:1px solid #aaa;
+	border-radius:6px;
+	padding:10px 20px;
+	font-size:11px;
+	margin:4px 0;
+	color:#333;
+	width:100%;
+	box-sizing:border-box;
+}
 input[type="submit"]{
 	background:#1e90ff;
 	color:#fff;

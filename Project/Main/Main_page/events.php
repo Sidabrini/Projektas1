@@ -1,15 +1,18 @@
 <?php
 require_once("Login/event.php");
+require_once("Login/config/database.php");
+
  session_start();
-if($_SESSION["events"] == NULL){
-    $events = $Events->GetArray();
-    $_SESSION["events"] = array();
-    for($i = 0; $i < sizeof($events); $i++) {
-        for ($j = 0; $j < 10; $j++) {
-            $_SESSION["events"][$i][$j] = $events[$i]->Loop($j);
-        }
+    $query = $Database->query("SELECT * FROM event_");
+    $Events = new Events;
+    while ($row = $query->fetch_assoc()) {
+        $Event = new Event;
+        $Event->set($row["Title"], $row["Category"], $row["City"], $row["Address"], $row["Place"], $row["Date"],  $row["Time"],
+                     $row["Duration"], $row["Price"], $row["Description"], $row["id_Event"], $row["fk_AdminEmail"]);
+        $Events->Add($Event);
     }
-}
+    $Naujas = $Events->GetArray();
+    $Events = $Naujas;
 if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
 ?>
 <!DOCTYPE html>
@@ -18,7 +21,7 @@ if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
     <meta charset="UTF-8">
     <title>HomePage</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css?t=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -32,7 +35,7 @@ if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
     <a href="?id=logout" style="float:right">Atsijungti</a>
     <a href="#" style="float:right">Keisti slaptažodį</a>
     <a href="#" style="float:right"><?php echo $_SESSION["login"]["email"]?></a>
-    <a href="index.php" style="float:right">Pagrindinis</a>
+    <a href="index.php" style="float:left">Pagrindinis</a>
     <?php }
           else { ?>
               <a href="#" style="float:right">Register</a>
@@ -48,33 +51,43 @@ if(isset($_GET["id"])) $ID = $_GET["id"]; else $ID = "";
 <div class="row">
     <div class="leftcolumn">
         <?php
-        if($_SESSION["events"] != NULL){
-            if(0 != sizeof($_SESSION["events"])) {
-                for ($i = 0; $i < sizeof($_SESSION["events"]); $i++) { ?>
+        if($Events != NULL){
+            if(0 != sizeof($Events)) {
+                for ($i = 0; $i < sizeof($Events); $i++) {
+                    if(isset($_POST["delete".$Events[$i]->loop(10)])) {
+                        $Database->query("DELETE FROM event_ WHERE id_Event=" . $Events[$i]->loop(10));
+                        header("Location: index.php");
+                    }
+                    ?>
                     <div class="card">
-                        <h2><?php echo $_SESSION["events"][$i][0] ?></h2>
-                        <h5><?php echo $_SESSION["events"][$i][2];
-                            echo " " . $_SESSION["events"][$i][6] ?></h5>
+                        <?php if($_SESSION["login"]["type"] == "admin"){?>
+                        <form  method="post" action="?">
+                            <input class="deletion" type="submit" value="Pašalinti" name="delete<?php echo $Events[$i]->loop(10)?>"/>
+                        </form>
+                        <?php }?>
+                        <h2><?php echo $Events[$i]->loop(0); ?></h2>
+                        <h5><?php echo $Events[$i]->loop(2);
+                            echo " " . $Events[$i]->loop(6); ?></h5>
                         <div class="fakeimg" style="height:125px;">
-                            <b>Kategorija</b>: <?php echo $_SESSION["events"][$i][1] ?><br>
-                            <b>Adresas</b>: <?php echo $_SESSION["events"][$i][3] ?><br>
-                            <b>Vieta</b>: <?php echo $_SESSION["events"][$i][4] ?><br>
-                            <b>Trukmė</b>: <?php echo $_SESSION["events"][$i][7] ?><br>
-                            <b>Kaina</b>: <?php echo $_SESSION["events"][$i][8] ?><br>
+                            <b>Kategorija</b>: <?php echo $Events[$i]->loop(1);?><br>
+                            <b>Adresas</b>: <?php echo $Events[$i]->loop(3); ?><br>
+                            <b>Vieta</b>: <?php echo $Events[$i]->loop(4); ?><br>
+                            <b>Trukmė</b>: <?php echo $Events[$i]->loop(7); ?><br>
+                            <b>Kaina</b>: <?php echo $Events[$i]->loop(8); ?><br>
                         </div>
-                        <p><?php echo $_SESSION["events"][$i][9] ?></p>
+                        <p><?php echo $Events[$i]->loop(9); ?></p>
                     </div>
                     <?php
                 }
             }
         }
-        if($_SESSION["events"] == NULL)
+        if($Events == NULL)
         {?>
             <div class="card">
                 <h2>Kolkas nėra vykstančių renginių</h2>
             </div>
         <?php }
-        elseif(sizeof($_SESSION["events"]) == 0)
+        elseif(sizeof($Events) == 0)
         {?>
         <div class="card">
             <h2>Kolkas nėra vykstančių renginių</h2>

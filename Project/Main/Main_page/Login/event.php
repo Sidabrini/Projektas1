@@ -13,8 +13,9 @@
         public $duration;
         public $price;
         public $description;
+        public $id;
 		
-		public function set($title, $category, $city, $address, $place, $date, $time, $duration, $price, $description){
+		public function set($title, $category, $city, $address, $place, $date, $time, $duration, $price, $description, $id){
 			$this->title = $title;
             $this->category = $category;
             $this->city = $city;
@@ -25,6 +26,7 @@
             $this->duration = $duration;
             $this->price = $price;
             $this->description = $description;
+            $this->id = $id;
 		}
 
 		public function GetTitle(){
@@ -52,6 +54,8 @@
                 return $this->price;
             if($j == 9)
                 return $this->description;
+            if($j == 10)
+                return $this->id;
         }
 	}
 	
@@ -96,7 +100,7 @@
 	
 	while ($row = $query->fetch_assoc()) {
         $event = new Event;
-		$event->set($row["Title"], $row["Category"], $row["City"], $row["Address"], $row["Place"], $row["Date"], $row["Time"], $row["Duration"], $row["Price"], $row["Description"]);
+		$event->set($row["Title"], $row["Category"], $row["City"], $row["Address"], $row["Place"], $row["Date"], $row["Time"], $row["Duration"], $row["Price"], $row["Description"], $row["id_Event"]);
 		$Events->Add($event);
     }
 	
