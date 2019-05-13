@@ -12,12 +12,12 @@
 
         {{ form_start(form) }}
         {% if action == "reset" %}
-            <h1 class="h3 mb-3 font-weight-normal">Prašome įvesti elektroninio pašto adresą</h1>
-            Elektroninio pašto adresas: {{ form_widget(form.email) }}<br />
+            <h1 class="h3 mb-3 font-weight-normal">Eneter your email here!</h1>
+            Email: {{ form_widget(form.email) }}<br />
         {% else %}
-            <h1 class="h3 mb-3 font-weight-normal">Įrašykite naują slaptažodį</h1>
-            Naujas slaptažodis: {{ form_widget(form.password.first) }}<br />
-            Pakartokite naują slaptažodį: {{ form_widget(form.password.second) }}<br />
+            <h1 class="h3 mb-3 font-weight-normal">Ener your new password</h1>
+            New password: {{ form_widget(form.password.first) }}<br />
+            Repeat your new password: {{ form_widget(form.password.second) }}<br />
         {% endif %}
         {{ form_start(form) }}
         {{ form(form, {'method': 'POST'}) }}
