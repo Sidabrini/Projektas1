@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use function MongoDB\BSON\fromJSON;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route("/admin/user")
@@ -35,14 +37,7 @@ class UserController extends AbstractController
     public function new(Request $request): Response
     {
         $user = new User();
-        $form = $this->createFormBuilder($user)
-            ->add('Name', TextType::class)
-            ->add('LastName', TextType::class)
-            ->add('BirthDate', DateType::class)
-            ->add('Email', EmailType::class)
-            ->add('Password', Type\PasswordType::class)
-            ->add('IsAdmin', Type\CheckboxType::class)
-            ->getForm();
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -54,7 +49,6 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/new.html.twig', [
-            'user' => $user,
             'form' => $form->createView(),
         ]);
     }
@@ -74,13 +68,8 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createFormBuilder($user)
-            ->add('Name', TextType::class)
-            ->add('LastName', TextType::class)
-            ->add('BirthDate', DateType::class)
-            ->add('Email', EmailType::class)
-            ->add('IsAdmin', Type\CheckboxType::class)
-            ->getForm();;
+        $form = $this->createForm(UserType::class, $user);
+        $form->remove('Password');
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
