@@ -12,6 +12,7 @@
         {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')) %}
             <a href="{{ absolute_url(path('app_logout')) }}" style="float: right">Atsijungti</a>
             <a href="{{ absolute_url(path('event_index')) }}" style="float: left">Renginiai</a>
+            <a href="{{ absolute_url(path('subscribtion_index')) }}" style="float: left">Prenumeratos</a>
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ absolute_url(path('user_index')) }}" style="float: left">Vartotojų sąrašas</a>
             {% endif %}
