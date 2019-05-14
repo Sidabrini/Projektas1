@@ -62,7 +62,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $title
      */
-    public function findByTitle(QueryBuilder $builder, string $title):void
+    private function findByTitle(QueryBuilder $builder, string $title):void
     {
         $builder->andWhere($builder->expr()->like('event.Title', ':name'))
             ->setParameter('name', '%'.$title.'%');
@@ -72,7 +72,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $category
      */
-    public function findByCategory(QueryBuilder $builder, string $category):void
+    private function findByCategory(QueryBuilder $builder, string $category):void
     {
         $builder->andWhere($builder->expr()->like('event.Category', ':category'))
             ->setParameter('category', '%'.$category.'%');
@@ -82,7 +82,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param array $date
      */
-    public function findByDate(QueryBuilder $builder, array $date):void
+    private function findByDate(QueryBuilder $builder, array $date):void
     {
         $builder->andWhere('event.Date = :date')
             ->setParameter('date', $date['year'].'-'.$date['month'].'-'.$date['day']);
@@ -93,7 +93,7 @@ class EventRepository extends ServiceEntityRepository
      * @param string $price_from
      * @param string $price_up_to
      */
-    public function findByPrice(QueryBuilder $builder, string $price_from, string $price_up_to):void
+    private function findByPrice(QueryBuilder $builder, string $price_from, string $price_up_to):void
     {
         $builder->andWhere('event.Price BETWEEN :price_from AND :price_up_to')
             ->setParameter('price_from', $price_from)
@@ -104,7 +104,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $price_from
      */
-    public function findByPriceFrom(QueryBuilder $builder, string $price_from):void
+    private function findByPriceFrom(QueryBuilder $builder, string $price_from):void
     {
         $builder->andWhere('event.Price >= :price_from')
             ->setParameter('price_from', $price_from);
@@ -114,7 +114,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $price_up_to
      */
-    public function findByPriceUpTo(QueryBuilder $builder, string $price_up_to):void
+    private function findByPriceUpTo(QueryBuilder $builder, string $price_up_to):void
     {
         $builder->andWhere('event.Price <= :price_up_to')
             ->setParameter('price_up_to', $price_up_to);
