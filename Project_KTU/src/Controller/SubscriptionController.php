@@ -9,18 +9,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Form\UserType;
 use App\Repository\CategoryRepository;
 use App\Repository\SubscribtionRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 /**
  * @Route("/profile/subscribe")
  */
@@ -90,7 +82,6 @@ class SubscriptionController extends AbstractController
             }
             return $this->redirectToRoute('subscribtion_index');
         }
-        //nerodo kokios katerogijos jau pasirinktos
         $index = 0;
         foreach ($subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId()) as $subs){
             $selected[$index++] = $subs->getCategory()->getName();
