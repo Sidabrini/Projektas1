@@ -38,7 +38,6 @@ class SubscriptionController extends AbstractController
             if(!isset($events[$index-1][0])){
                 $events[$index-1] = $categoryRepository->findById($sub->getCategory()->getId())[0]->getName();
             }
-            //dump($events);
         }
         if(isset($subscribtions[0])) {
 
@@ -46,7 +45,6 @@ class SubscriptionController extends AbstractController
                 if(isset($a[0]) && !is_string($a) && isset($b[0]) && !is_string($b))
                 return strcmp($a[0]->getCategory(), $b[0]->getCategory());
             });
-            $categories = $categoryRepository->findById($subscribtions[0]->getCategory()->getId());
             return $this->render('subscribtion/index.html.twig', [
                 'events' => $events,
             ]);
