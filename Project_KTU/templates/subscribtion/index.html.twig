@@ -41,12 +41,17 @@
                         <a class="btn btn-primary" href="{{ path('event_edit', {'id': eventclass.id}) }}">edit</a>
                     {% endif %}
                 </td>
+                </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="12">no records found for {{ event }} </td>
+                </tr>
             {% endfor %}
-            </td>
-            </tr>
+
         {% else %}
             <tr>
-                <td colspan="12">no records found</td>
+                <td colspan="12">Not subscribed</td>
             </tr>
         {% endfor %}
         </tbody>

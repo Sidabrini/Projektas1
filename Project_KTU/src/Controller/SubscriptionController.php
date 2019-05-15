@@ -1,7 +1,6 @@
 <?php
 // src/Controller/SubscribtionController.php
 namespace App\Controller;
-
 use App\Entity\Subscribtion;
 use App\Entity\Category;
 use App\Entity\User;
@@ -22,7 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-
 /**
  * @Route("/profile/subscribe")
  */
@@ -35,13 +33,17 @@ class SubscriptionController extends AbstractController
     {
         $index = 0;
         $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
-
         foreach ($subscribtions as $sub) {
-            $events[$index++] = $eventRepository->findByCategory($sub->getCategory());
+            $events[$index++] = $eventRepository->findByCategory($categoryRepository->findById($sub->getCategory()->getId())[0]->getName());
+            if(!isset($events[$index-1][0])){
+                $events[$index-1] = $categoryRepository->findById($sub->getCategory()->getId())[0]->getName();
+            }
+            //dump($events);
         }
-
         if(isset($subscribtions[0])) {
+
             usort($events, function($a, $b) {
+                if(isset($a[0]) && !is_string($a) && isset($b[0]) && !is_string($b))
                 return strcmp($a[0]->getCategory(), $b[0]->getCategory());
             });
             $categories = $categoryRepository->findById($subscribtions[0]->getCategory()->getId());
@@ -55,23 +57,20 @@ class SubscriptionController extends AbstractController
             ]);
         }
     }
-
     /**
      * @Route("/admin/new", name="subscribtion_new", methods={"GET","POST"})
      */
     public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
-        //nepavyko paanaudoti form nes kiekviena cikla persiraso elementas, o kito pavadinimo neuzdejau, nes pavadinimas susietas su kintamuoju
+        //nepavyko paanaudoti form nes kiekviena cikla persiraso elementas,
+        // o kito pavadinimo neuzdejau, nes pavadinimas susietas su kintamuoju
         $subscribtion = new Subscribtion();
-
         foreach ($categoryRepository->findAll() as $temp) {
             $form = $this->createFormBuilder($subscribtion)
                 ->getForm();
         }
-
         if(!isset($request->request->all()["form"]))
             $form->handleRequest($request);
-
         if (isset($request->request->all()["form"])) {
             $em = $this->getDoctrine()->getManager();
             $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
