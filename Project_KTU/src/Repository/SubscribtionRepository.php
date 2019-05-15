@@ -36,15 +36,15 @@ class SubscribtionRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Subscribtion
+
+    public function findByUserId($value)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+            ->andWhere('s.Userid = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+
 }

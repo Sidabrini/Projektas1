@@ -1,4 +1,9 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    {% for cat in cats %}
+        <input id="category"{{ cat.name }} type="checkbox" value={{ cat.id }} name="category{{ loop.index }}" >
+        {{ cat.name }}
+        {{ "\n"|nl2br }}
+    {% endfor %}
     <button class="btn btn-success">{{ button_label|default('Select') }}</button>
 {{ form_end(form) }}

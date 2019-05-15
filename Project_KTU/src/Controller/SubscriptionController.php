@@ -30,9 +30,11 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/", name="subscribtion_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(SubscribtionRepository $subscribtionRepository ): Response
     {
-        return $this->render('subscribtion/index.html.twig');
+        return $this->render('subscribtion/index.html.twig', [
+            'subscribtions' => $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId())
+        ]);
     }
 
     /**
@@ -40,25 +42,8 @@ class SubscriptionController extends AbstractController
      */
     public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
-        $category = new Category();
         $subscribtion = new Subscribtion();
 
-        foreach ($categoryRepository->findAll() as $temp) {
-            $form = $this->createFormBuilder($category)
-                ->add('category', CheckboxType::class, [
-                    'label' => $temp->getName(),
-                    'required' => false,
-
-                ])
-                ->getForm();
-        }
-
-        $form->handleRequest($request);
-
-        return $this->render('subscribtion/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-        /*
         foreach ($categoryRepository->findAll() as $temp) {
             $form = $this->createFormBuilder($subscribtion)
                 ->add('category', CheckboxType::class, [
@@ -67,16 +52,35 @@ class SubscriptionController extends AbstractController
                 ])
                 ->getForm();
         }
+
+        $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $subscribtion->setUserid($this->getUser());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($subscribtion);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
+            foreach ($subscribtions as $subs) {
+                $em->remove($subs);
+            }
+            $em->flush();
+            $params = $request->request->all();
+            foreach($params as $temp){
+                if($temp != $params["form"]) {
+                    $subscribtionnew = new Subscribtion();
+                    $subscribtionnew->setCategory($temp);
+                    $subscribtionnew->setUserid($this->getUser()->getId());
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($subscribtionnew);
+                    $entityManager->flush();
+                    $entityManager->clear();
+                }
+            }
+            return $this->redirectToRoute('subscribtion_index');
+        }
 
-            return $this->redirectToRoute('event_index');
-        }*/
-
-
+        return $this->render('subscribtion/new.html.twig', [
+            'cats' => $categoryRepository->findAll(),
+            'form' => $form->createView(),
+        ]);
     }
     //public function index(): Response
     //{

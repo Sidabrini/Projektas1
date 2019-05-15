@@ -4,6 +4,11 @@
 
 {% block body %}
     <h1>Subscribed events</h1>
+    {% for subscribtion in subscribtions %}
+    {{ subscribtion.id }}
+    {{ subscribtion.category }}
+    {{ subscribtion.userid }}
+    {% endfor %}
     <a class="btn btn-primary" href="{{ path('subscribtion_new') }}">Select new</a>
 {% endblock %}
 
