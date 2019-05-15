@@ -40,7 +40,6 @@ class SubscriptionController extends AbstractController
             }
         }
         if(isset($subscribtions[0])) {
-
             usort($events, function($a, $b) {
                 if(isset($a[0]) && !is_string($a) && isset($b[0]) && !is_string($b))
                 return strcmp($a[0]->getCategory(), $b[0]->getCategory());
@@ -55,13 +54,14 @@ class SubscriptionController extends AbstractController
             ]);
         }
     }
+
     /**
      * @Route("/admin/new", name="subscribtion_new", methods={"GET","POST"})
      */
     public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
-        //nepavyko paanaudoti form nes kiekviena cikla persiraso elementas,
-        // o kito pavadinimo neuzdejau, nes pavadinimas susietas su kintamuoju
+        //nepavyko panaudoti form nes kiekviena cikla persiraso sekantis elementas tuo paciu vardu,
+        // o kito pavadinimo nepavyko uzdeti, nes pavadinimas susietas su kintamuoju
         $subscribtion = new Subscribtion();
         foreach ($categoryRepository->findAll() as $temp) {
             $form = $this->createFormBuilder($subscribtion)
@@ -91,8 +91,20 @@ class SubscriptionController extends AbstractController
             return $this->redirectToRoute('subscribtion_index');
         }
         //nerodo kokios katerogijos jau pasirinktos
+        $index = 0;
+        foreach ($subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId()) as $subs){
+            $selected[$index++] = $subs->getCategory()->getName();
+        }
+        if (isset($selected)) {
+            return $this->render('subscribtion/new.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'selected' => $selected,
+                'form' => $form->createView(),
+            ]);
+        }
         return $this->render('subscribtion/new.html.twig', [
             'categories' => $categoryRepository->findAll(),
+            'selected' => "",
             'form' => $form->createView(),
         ]);
     }

@@ -1,7 +1,7 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
     {% for category in categories %}
-        <input id="category"{{ category.name }} type="checkbox" value={{ category.id }} name="category{{ loop.index }}" >
+        <input id="category"{{ category.name }} type="checkbox" value={{ category.id }} name="category{{ loop.index }}" {% if category.name in selected %} checked {% endif %}>
         {{ category.name }}
         {{ "\n"|nl2br }}
     {% endfor %}
