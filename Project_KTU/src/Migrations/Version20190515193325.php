@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190407192759 extends AbstractMigration
+final class Version20190515193325 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,9 @@ final class Version20190407192759 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE event (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, category VARCHAR(30) NOT NULL, city VARCHAR(30) NOT NULL, address VARCHAR(40) NOT NULL, place VARCHAR(40) NOT NULL, date DATE NOT NULL, time TIME NOT NULL, duration TIME NOT NULL, price DOUBLE PRECISION NOT NULL, description LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE subscribtion CHANGE category_id category_id INT NOT NULL');
+        $this->addSql('ALTER TABLE subscribtion ADD CONSTRAINT FK_B9E6A03112469DE2 FOREIGN KEY (category_id) REFERENCES category (id)');
+        $this->addSql('CREATE INDEX IDX_B9E6A03112469DE2 ON subscribtion (category_id)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +32,8 @@ final class Version20190407192759 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE event');
+        $this->addSql('ALTER TABLE subscribtion DROP FOREIGN KEY FK_B9E6A03112469DE2');
+        $this->addSql('DROP INDEX IDX_B9E6A03112469DE2 ON subscribtion');
+        $this->addSql('ALTER TABLE subscribtion CHANGE category_id category_id VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci');
     }
 }

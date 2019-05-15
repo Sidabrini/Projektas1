@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Subscribtion{% endblock %}
+
+{% block body %}
+    <h1>Subscribe to</h1>
+    {{ include('subscribtion/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('subscribtion_index') }}">back to list</a>
+{% endblock %}

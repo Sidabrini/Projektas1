@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My subscribtions{% endblock %}
+
+{% block body %}
+    <h1>Subscribed events</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>City</th>
+            <th>Address</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            {% for eventclass in event %}
+                <td>{{ eventclass.id }}</td>
+                <td>{{ eventclass.Title }}</td>
+                <td>{{ eventclass.Category }}</td>
+                <td>{{ eventclass.City }}</td>
+                <td>{{ eventclass.Address }}</td>
+                <td>{{ eventclass.Place }}</td>
+                <td>{{ eventclass.Date ? eventclass.Date|date('Y-m-d') : '' }}</td>
+                <td>{{ eventclass.Time ? eventclass.Time|date('H:i:s') : '' }}</td>
+                <td>{{ eventclass.Duration ? eventclass.Duration|date('H:i:s') : '' }}</td>
+                <td>{{ eventclass.Price }}</td>
+                <td>{{ eventclass.Description }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('event_show', {'id': eventclass.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary" href="{{ path('event_edit', {'id': eventclass.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+                </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="12">no records found for {{ event }} </td>
+                </tr>
+            {% endfor %}
+
+        {% else %}
+            <tr>
+                <td colspan="12">Not subscribed</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('subscribtion_new') }}">Subscribed categories</a>
+{% endblock %}
+
