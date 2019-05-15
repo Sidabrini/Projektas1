@@ -45,7 +45,11 @@
             </tr>
             <tr>
                 <th>Price</th>
-                <td>{{ event.Price }}</td>
+                {% if event.Price == 0 %}
+                <td>Nemokamai</td>
+                    {% else %}
+                    <td>{{ event.Price }}</td>
+                {% endif %}
             </tr>
             <tr>
                 <th>Description</th>

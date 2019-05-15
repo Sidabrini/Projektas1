@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Form\Event1Type;
+use App\Form\EventFilterType;
+use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\FloatType;
 use Doctrine\ORM\Mapping\Entity;
@@ -24,12 +25,32 @@ use Symfony\Component\Security\Core\User\User;
 class EventController extends AbstractController
 {
     /**
-     * @Route("/", name="event_index", methods={"GET"})
+     * @Route("/", name="event_index", methods={"GET", "Post"})
      */
-    public function index(EventRepository $eventRepository): Response
+    public function index(EventRepository $eventRepository, Request $request ): Response
     {
+        $form = $this->createForm(EventFilterType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $filter = $request->request->get('event_filter');
+
+            $event = $eventRepository->findByFilterData(
+                $filter['Title'],
+                $filter['Category'],
+                $filter['Date'],
+                $filter['Price_from'],
+                $filter['Price_up_to']
+                );
+        }
+        else{
+            $event = $eventRepository->findAll();
+        }
+
         return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $event,
+            'form' => $form->createView()
         ]);
     }
 
@@ -39,27 +60,12 @@ class EventController extends AbstractController
     public function new(Request $request): Response
     {
         $event = new Event();
-        $form = $this->createFormBuilder($event)
-            ->add('Title', TextType::class)
-            ->add('Category', TextType::class)
-            ->add('City', TextType::class)
-            ->add('Address', TextType::class)
-            ->add('Place', TextType::class)
-            ->add('Date', DateType::class)
-            ->add('Time', Type\TimeType::class)
-            ->add('Duration', Type\TimeType::class)
-            ->add('Price', Type\MoneyType::class)
-            ->add('Description', Type\TextareaType::class)
-            ->add('Creator', EntityType::class, [
-                'class' => \App\Entity\User::class,
-                'choice_label' => function(){return $this->getUser()->getEmail();},
-                'disabled' => true
-            ])
-            ->getForm();
-
+        $form = $this->createForm(EventType::class, $event);
+        $form->get('Creator')->setData($this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $event->setCreator($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
@@ -89,23 +95,7 @@ class EventController extends AbstractController
      */
     public function edit(Request $request, Event $event): Response
     {
-        $form = $this->createFormBuilder($event)
-            ->add('Title', TextType::class)
-            ->add('Category', TextType::class)
-            ->add('City', TextType::class)
-            ->add('Address', TextType::class)
-            ->add('Place', TextType::class)
-            ->add('Date', DateType::class)
-            ->add('Time', Type\TimeType::class)
-            ->add('Duration', Type\TimeType::class)
-            ->add('Price', Type\MoneyType::class)
-            ->add('Description', Type\TextareaType::class)
-            ->add('Creator', EntityType::class, [
-                'class' => \App\Entity\User::class,
-                'choice_label' => 'email',
-                'disabled' => true
-            ])
-            ->getForm();
+        $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
