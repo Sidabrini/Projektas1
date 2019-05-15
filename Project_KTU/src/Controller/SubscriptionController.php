@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Subscribtion;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Repository\EventRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Form\UserType;
 use App\Repository\CategoryRepository;
@@ -30,11 +31,29 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/", name="subscribtion_index", methods={"GET"})
      */
-    public function index(SubscribtionRepository $subscribtionRepository ): Response
+    public function index(SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository, EventRepository $eventRepository): Response
     {
-        return $this->render('subscribtion/index.html.twig', [
-            'subscribtions' => $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId())
-        ]);
+        $index = 0;
+        $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
+
+        foreach ($subscribtions as $sub) {
+            $events[$index++] = $eventRepository->findByCategory($sub->getCategory());
+        }
+
+        if(isset($subscribtions[0])) {
+            usort($events, function($a, $b) {
+                return strcmp($a[0]->getCategory(), $b[0]->getCategory());
+            });
+            $categories = $categoryRepository->findById($subscribtions[0]->getCategory()->getId());
+            return $this->render('subscribtion/index.html.twig', [
+                'events' => $events,
+            ]);
+        }
+        else{
+            return $this->render('subscribtion/index.html.twig', [
+                'events' => null,
+            ]);
+        }
     }
 
     /**
@@ -42,20 +61,18 @@ class SubscriptionController extends AbstractController
      */
     public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
+        //nepavyko paanaudoti form nes kiekviena cikla persiraso elementas, o kito pavadinimo neuzdejau, nes pavadinimas susietas su kintamuoju
         $subscribtion = new Subscribtion();
 
         foreach ($categoryRepository->findAll() as $temp) {
             $form = $this->createFormBuilder($subscribtion)
-                ->add('category', CheckboxType::class, [
-                    'label' => $temp->getName(),
-                    'required' => false,
-                ])
                 ->getForm();
         }
 
-        $form->handleRequest($request);
+        if(!isset($request->request->all()["form"]))
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if (isset($request->request->all()["form"])) {
             $em = $this->getDoctrine()->getManager();
             $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
             foreach ($subscribtions as $subs) {
@@ -66,7 +83,7 @@ class SubscriptionController extends AbstractController
             foreach($params as $temp){
                 if($temp != $params["form"]) {
                     $subscribtionnew = new Subscribtion();
-                    $subscribtionnew->setCategory($temp);
+                    $subscribtionnew->setCategory($categoryRepository->findById($temp)[0]);
                     $subscribtionnew->setUserid($this->getUser()->getId());
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($subscribtionnew);
@@ -76,14 +93,10 @@ class SubscriptionController extends AbstractController
             }
             return $this->redirectToRoute('subscribtion_index');
         }
-
+        //nerodo kokios katerogijos jau pasirinktos
         return $this->render('subscribtion/new.html.twig', [
-            'cats' => $categoryRepository->findAll(),
+            'categories' => $categoryRepository->findAll(),
             'form' => $form->createView(),
         ]);
     }
-    //public function index(): Response
-    //{
-    //  return $this->render('event/subscriber.html.twig');
-    //}
 }

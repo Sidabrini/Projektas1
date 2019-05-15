@@ -17,7 +17,8 @@ class Subscribtion
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="subscribtions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $Category;
 
@@ -31,12 +32,12 @@ class Subscribtion
         return $this->id;
     }
 
-    public function getCategory(): ?string
+    public function getCategory(): ?Category
     {
         return $this->Category;
     }
 
-    public function setCategory(string $Category): self
+    public function setCategory(?Category $Category): self
     {
         $this->Category = $Category;
 
