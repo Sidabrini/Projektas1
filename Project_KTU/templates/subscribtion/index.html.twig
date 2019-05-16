@@ -26,7 +26,7 @@
             {% for eventclass in event %}
                 <td>{{ eventclass.id }}</td>
                 <td>{{ eventclass.Title }}</td>
-                <td>{{ eventclass.Category }}</td>
+                <td>{{ eventclass.Category.Name }}</td>
                 <td>{{ eventclass.City }}</td>
                 <td>{{ eventclass.Address }}</td>
                 <td>{{ eventclass.Place }}</td>
@@ -37,9 +37,6 @@
                 <td>{{ eventclass.Description }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path('event_show', {'id': eventclass.id}) }}">show</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-primary" href="{{ path('event_edit', {'id': eventclass.id}) }}">edit</a>
-                    {% endif %}
                 </td>
                 </td>
                 </tr>

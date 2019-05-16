@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nauja kategorija{% endblock %}
+
+{% block body %}
+    <div class="container" style="width: 600px; margin-left: 0px">
+        <h1>Kurti nauja kategorija</h1>
+
+        {{ include('category/_form.html.twig') }}
+
+        <a class="btn btn-secondary" href="{{ path('category_index') }}">back to list</a>
+    </div>
+    
+{% endblock %}

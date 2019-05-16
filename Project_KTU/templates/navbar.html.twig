@@ -14,6 +14,7 @@
             <a href="{{ absolute_url(path('event_index')) }}" style="float: left">Renginiai</a>
             <a href="{{ absolute_url(path('subscribtion_index')) }}" style="float: left">Prenumeratos</a>
             {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ absolute_url(path('category_index')) }}" style="float: left">Kategorijos</a>
                 <a href="{{ absolute_url(path('user_index')) }}" style="float: left">Vartotojų sąrašas</a>
             {% endif %}
             {% else %}

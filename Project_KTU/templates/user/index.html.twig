@@ -3,10 +3,11 @@
 {% block title %}Vartotojų sąrašas{% endblock %}
 
 {% block body %}
-    <h1>Vartotojų sąrašas</h1>
+    <div class="container">
+        <h1>Vartotojų sąrašas</h1>
 
-    <table class="table">
-        <thead class="thead-dark">
+        <table class="table">
+            <thead class="thead-dark">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
@@ -16,28 +17,30 @@
                 <th>IsAdmin</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.Name }}</td>
-                <td>{{ user.Lastname }}</td>
-                <td>{{ user.Birthdate ? user.Birthdate|date('Y-m-d') : '' }}</td>
-                <td>{{ user.Email }}</td>
-                <td>{{ user.IsAdmin ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a class="btn btn-primary" href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.Name }}</td>
+                    <td>{{ user.Lastname }}</td>
+                    <td>{{ user.Birthdate ? user.Birthdate|date('Y-m-d') : '' }}</td>
+                    <td>{{ user.Email }}</td>
+                    <td>{{ user.IsAdmin ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                        <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a class="btn btn-primary" href="{{ path('user_new') }}">Create new</a>
+        <a class="btn btn-primary" href="{{ path('user_new') }}">Create new</a>
+    </div>
+
 {% endblock %}

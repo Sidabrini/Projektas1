@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kategorijos redagavimas{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-left: 0px; width: 400px">
+        <h1>Kategorijos redagavimas</h1>
+        {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a class="btn btn-secondary" href="{{ path('category_index') }}">back to list</a>
+
+        {{ include('category/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

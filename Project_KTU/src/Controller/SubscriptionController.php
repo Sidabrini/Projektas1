@@ -5,6 +5,7 @@ use App\Entity\Subscribtion;
 use App\Entity\Category;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use PhpParser\Node\Name;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Form\UserType;
 use App\Repository\CategoryRepository;
@@ -26,7 +27,7 @@ class SubscriptionController extends AbstractController
         $index = 0;
         $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
         foreach ($subscribtions as $sub) {
-            $events[$index++] = $eventRepository->findByCategory($categoryRepository->findById($sub->getCategory()->getId())[0]->getName());
+            $events[$index++] = $eventRepository->findByCategory($categoryRepository->findById($sub->getCategory()->getId())[0]->getid());
             if(!isset($events[$index-1][0])){
                 $events[$index-1] = $categoryRepository->findById($sub->getCategory()->getId())[0]->getName();
             }
@@ -34,7 +35,7 @@ class SubscriptionController extends AbstractController
         if(isset($subscribtions[0])) {
             usort($events, function($a, $b) {
                 if(isset($a[0]) && !is_string($a) && isset($b[0]) && !is_string($b))
-                return strcmp($a[0]->getCategory(), $b[0]->getCategory());
+                return strcmp($a[0]->getCategory()->getName(), $b[0]->getCategory()->getName());
             });
             return $this->render('subscribtion/index.html.twig', [
                 'events' => $events,
@@ -48,7 +49,7 @@ class SubscriptionController extends AbstractController
     }
 
     /**
-     * @Route("/admin/new", name="subscribtion_new", methods={"GET","POST"})
+     * @Route("/new", name="subscribtion_new", methods={"GET","POST"})
      */
     public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
