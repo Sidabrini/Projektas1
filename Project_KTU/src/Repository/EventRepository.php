@@ -35,23 +35,23 @@ class EventRepository extends ServiceEntityRepository
     {
         $gb = $this->createQueryBuilder('event');
 
-        $this->findByTitle($gb, $title);
+        $this->filterByTitle($gb, $title);
 
         if ($category != null){
-            $this->findByCategory($gb, $category);
+            $this->filterByCategory($gb, $category);
         }
         if ($date['month'] != null || $date['day'] != null || $date['year'] != null){
-            $this->findByDate($gb, $date);
+            $this->filterByDate($gb, $date);
         }
         if ($price_from != null && $price_up_to != null){
-            $this->findByPrice($gb, $price_from, $price_up_to);
+            $this->filterByPrice($gb, $price_from, $price_up_to);
         }
         else if ($price_from != null || $price_up_to != null){
             if($price_from != null){
-                $this->findByPriceFrom($gb, $price_from);
+                $this->filterByPriceFrom($gb, $price_from);
             }
             else{
-                $this->findByPriceUpTo($gb, $price_up_to);
+                $this->filterByPriceUpTo($gb, $price_up_to);
             }
         }
 
@@ -62,7 +62,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $title
      */
-    private function findByTitle(QueryBuilder $builder, string $title):void
+    private function filterByTitle(QueryBuilder $builder, string $title):void
     {
         $builder->andWhere($builder->expr()->like('event.Title', ':name'))
             ->setParameter('name', '%'.$title.'%');
@@ -72,7 +72,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $category
      */
-    private function findByCategory(QueryBuilder $builder, string $category):void
+    private function filterByCategory(QueryBuilder $builder, string $category):void
     {
         $builder->andWhere($builder->expr()->like('event.Category', ':category'))
             ->setParameter('category', '%'.$category.'%');
@@ -82,7 +82,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param array $date
      */
-    private function findByDate(QueryBuilder $builder, array $date):void
+    private function filterByDate(QueryBuilder $builder, array $date):void
     {
         $builder->andWhere('event.Date = :date')
             ->setParameter('date', $date['year'].'-'.$date['month'].'-'.$date['day']);
@@ -93,7 +93,7 @@ class EventRepository extends ServiceEntityRepository
      * @param string $price_from
      * @param string $price_up_to
      */
-    private function findByPrice(QueryBuilder $builder, string $price_from, string $price_up_to):void
+    private function filterByPrice(QueryBuilder $builder, string $price_from, string $price_up_to):void
     {
         $builder->andWhere('event.Price BETWEEN :price_from AND :price_up_to')
             ->setParameter('price_from', $price_from)
@@ -104,7 +104,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $price_from
      */
-    private function findByPriceFrom(QueryBuilder $builder, string $price_from):void
+    private function filterByPriceFrom(QueryBuilder $builder, string $price_from):void
     {
         $builder->andWhere('event.Price >= :price_from')
             ->setParameter('price_from', $price_from);
@@ -114,7 +114,7 @@ class EventRepository extends ServiceEntityRepository
      * @param QueryBuilder $builder
      * @param string $price_up_to
      */
-    private function findByPriceUpTo(QueryBuilder $builder, string $price_up_to):void
+    private function filterByPriceUpTo(QueryBuilder $builder, string $price_up_to):void
     {
         $builder->andWhere('event.Price <= :price_up_to')
             ->setParameter('price_up_to', $price_up_to);
@@ -137,6 +137,10 @@ class EventRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     public function findByCategory($value)
     {
         return $this->createQueryBuilder('e')
