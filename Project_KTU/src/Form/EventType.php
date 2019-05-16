@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Event;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,7 +18,10 @@ class EventType extends AbstractType
     {
         $builder
             ->add('Title', TextType::class)
-            ->add('Category', TextType::class)
+            ->add('Category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name'
+            ])
             ->add('City', TextType::class)
             ->add('Address', TextType::class)
             ->add('Place', TextType::class)

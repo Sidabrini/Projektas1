@@ -74,8 +74,8 @@ class EventRepository extends ServiceEntityRepository
      */
     private function filterByCategory(QueryBuilder $builder, string $category):void
     {
-        $builder->andWhere($builder->expr()->like('event.Category', ':category'))
-            ->setParameter('category', '%'.$category.'%');
+        $builder->andWhere('event.Category = :category')
+            ->setParameter('category', $category);
     }
 
     /**

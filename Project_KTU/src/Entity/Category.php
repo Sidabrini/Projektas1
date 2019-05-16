@@ -29,9 +29,15 @@ class Category
      */
     private $subscribtions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="Category")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->subscribtions = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,6 +53,37 @@ class Category
     public function setName(string $Name): self
     {
         $this->Name = $Name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            // set the owning side to null (unless already changed)
+            if ($event->getCategory() === $this) {
+                $event->setCategory(null);
+            }
+        }
 
         return $this;
     }

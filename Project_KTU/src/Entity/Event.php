@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,13 +24,6 @@ class Event
      * @Assert\NotBlank
      */
     private $Title;
-
-    /**
-     * @ORM\Column(type="string", length=30)
-     * @Assert\NotBlank
-     * @Assert\Length(max = 30)
-     */
-    private $Category;
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -87,6 +82,12 @@ class Event
      */
     private $Creator;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,18 +101,6 @@ class Event
     public function setTitle(string $Title): self
     {
         $this->Title = $Title;
-
-        return $this;
-    }
-
-    public function getCategory(): ?string
-    {
-        return $this->Category;
-    }
-
-    public function setCategory(string $Category): self
-    {
-        $this->Category = $Category;
 
         return $this;
     }
@@ -220,6 +209,18 @@ class Event
     public function setCreator(?User $Creator): self
     {
         $this->Creator = $Creator;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->Category;
+    }
+
+    public function setCategory(?Category $Category): self
+    {
+        $this->Category = $Category;
 
         return $this;
     }

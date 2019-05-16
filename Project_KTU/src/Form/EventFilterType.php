@@ -9,6 +9,8 @@
 namespace App\Form;
 
 
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -25,9 +27,11 @@ class EventFilterType extends AbstractType
                 'attr' => ['placeholder' => "Renginio pavadinimas"],
 
             ])
-            ->add('Category', TextType::class, [
+            ->add('Category', EntityType::class, [
+                'class' => Category::class,
                 'label' => "Kategorija",
-                'attr' => ['placeholder' => "Renginio kategorija"],
+                'choice_label' => 'name',
+                'placeholder' => "Visos",
 
             ])
             ->add('Date', Type\DateType::class, [
