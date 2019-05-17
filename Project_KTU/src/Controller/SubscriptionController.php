@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @Route("/profile/subscribe")
  */
@@ -22,7 +23,7 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/", name="subscribtion_index", methods={"GET"})
      */
-    public function index(SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository, EventRepository $eventRepository): Response
+    public function index(\Swift_Mailer $mailer, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository, EventRepository $eventRepository): Response
     {
         $index = 0;
         $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
@@ -39,11 +40,13 @@ class SubscriptionController extends AbstractController
             });
             return $this->render('subscribtion/index.html.twig', [
                 'events' => $events,
+                'noevents' => false,
             ]);
         }
         else{
             return $this->render('subscribtion/index.html.twig', [
                 'events' => null,
+                'noevents' => false,
             ]);
         }
     }
@@ -51,7 +54,7 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/new", name="subscribtion_new", methods={"GET","POST"})
      */
-    public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
+    public function new(Request $request, \Swift_Mailer $mailer, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
         //nepavyko panaudoti form nes kiekviena cikla persiraso sekantis elementas tuo paciu vardu,
         // o kito pavadinimo nepavyko uzdeti, nes pavadinimas susietas su kintamuoju
@@ -60,7 +63,7 @@ class SubscriptionController extends AbstractController
             $form = $this->createFormBuilder($subscribtion)
                 ->getForm();
         }
-        if(!isset($request->request->all()["form"]))
+        if(isset($request->request->all()["form"]))
             $form->handleRequest($request);
         if (isset($request->request->all()["form"])) {
             $em = $this->getDoctrine()->getManager();
@@ -86,6 +89,12 @@ class SubscriptionController extends AbstractController
         $index = 0;
         foreach ($subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId()) as $subs){
             $selected[$index++] = $subs->getCategory()->getName();
+        }
+        if(sizeof($categoryRepository->findAll()) == 0){
+            return $this->render('subscribtion/index.html.twig', [
+                'events' => null,
+                'noevents' => true,
+            ]);
         }
         if (isset($selected)) {
             return $this->render('subscribtion/new.html.twig', [

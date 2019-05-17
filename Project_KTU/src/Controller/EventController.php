@@ -6,6 +6,8 @@ use App\Entity\Event;
 use App\Form\EventFilterType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use App\Repository\SubscribtionRepository;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\FloatType;
 use Doctrine\ORM\Mapping\Entity;
 use phpDocumentor\Reflection\Types\Integer;
@@ -57,7 +59,7 @@ class EventController extends AbstractController
     /**
      * @Route("/admin/new", name="event_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, \Swift_Mailer $mailer, UserRepository $userRepository, SubscribtionRepository $subscribtionRepository): Response
     {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
@@ -65,12 +67,22 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $subscribers = $subscribtionRepository->findByCategoryId($event->getCategory()->getId());
+            foreach ($subscribers as $subscriber) {
+                $user = $userRepository->findById($subscriber->getUserId());
+                $message = (new \Swift_Message('DD projektas'))
+                    ->setFrom("DD.project@noreply.com")
+                    ->setTo($user[0]->getEmail())
+                    ->setBody(
+                        "Prie jūsų prenumeruotos kategorijos: " . $event->getCategory()->getName() . "",
+                        'text/plain'
+                    );
+                $mailer->send($message);
+            }
             $event->setCreator($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
             $entityManager->flush();
-
             return $this->redirectToRoute('event_index');
         }
 
