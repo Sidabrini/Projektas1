@@ -68,21 +68,22 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $subscribers = $subscribtionRepository->findByCategoryId($event->getCategory()->getId());
+            $event->setCreator($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($event);
+            $entityManager->flush();
             foreach ($subscribers as $subscriber) {
                 $user = $userRepository->findById($subscriber->getUserId());
                 $message = (new \Swift_Message('DD projektas'))
                     ->setFrom("DD.project@noreply.com")
                     ->setTo($user[0]->getEmail())
                     ->setBody(
-                        "Prie jūsų prenumeruotos kategorijos: " . $event->getCategory()->getName() . "",
+                        "Prie jūsų prenumeruotos kategorijos: " . $event->getCategory()->getName(). ", buvo pridėtas renginys." .
+                        "\nRenginį galite pamatyti čia: http://localhost/naujas/Projektas1/Project_KTU/public/index.php/profile/event/". $event->getId(),
                         'text/plain'
                     );
                 $mailer->send($message);
             }
-            $event->setCreator($this->getUser());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($event);
-            $entityManager->flush();
             return $this->redirectToRoute('event_index');
         }
 
