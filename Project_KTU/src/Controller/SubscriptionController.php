@@ -54,7 +54,7 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/new", name="subscribtion_new", methods={"GET","POST"})
      */
-    public function new(Request $request, \Swift_Mailer $mailer, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
+    public function new(Request $request, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository): Response
     {
         //nepavyko panaudoti form nes kiekviena cikla persiraso sekantis elementas tuo paciu vardu,
         // o kito pavadinimo nepavyko uzdeti, nes pavadinimas susietas su kintamuoju
@@ -63,8 +63,6 @@ class SubscriptionController extends AbstractController
             $form = $this->createFormBuilder($subscribtion)
                 ->getForm();
         }
-        if(isset($request->request->all()["form"]))
-            $form->handleRequest($request);
         if (isset($request->request->all()["form"])) {
             $em = $this->getDoctrine()->getManager();
             $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
