@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @Route("/profile/subscribe")
  */
@@ -22,7 +23,7 @@ class SubscriptionController extends AbstractController
     /**
      * @Route("/", name="subscribtion_index", methods={"GET"})
      */
-    public function index(SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository, EventRepository $eventRepository): Response
+    public function index(\Swift_Mailer $mailer, SubscribtionRepository $subscribtionRepository, CategoryRepository $categoryRepository, EventRepository $eventRepository): Response
     {
         $index = 0;
         $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
@@ -39,11 +40,13 @@ class SubscriptionController extends AbstractController
             });
             return $this->render('subscribtion/index.html.twig', [
                 'events' => $events,
+                'noevents' => false,
             ]);
         }
         else{
             return $this->render('subscribtion/index.html.twig', [
                 'events' => null,
+                'noevents' => false,
             ]);
         }
     }
@@ -60,8 +63,6 @@ class SubscriptionController extends AbstractController
             $form = $this->createFormBuilder($subscribtion)
                 ->getForm();
         }
-        if(!isset($request->request->all()["form"]))
-            $form->handleRequest($request);
         if (isset($request->request->all()["form"])) {
             $em = $this->getDoctrine()->getManager();
             $subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId());
@@ -86,6 +87,12 @@ class SubscriptionController extends AbstractController
         $index = 0;
         foreach ($subscribtions = $subscribtionRepository->findByUserId($this->getUser()->getId()) as $subs){
             $selected[$index++] = $subs->getCategory()->getName();
+        }
+        if(sizeof($categoryRepository->findAll()) == 0){
+            return $this->render('subscribtion/index.html.twig', [
+                'events' => null,
+                'noevents' => true,
+            ]);
         }
         if (isset($selected)) {
             return $this->render('subscribtion/new.html.twig', [

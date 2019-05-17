@@ -42,14 +42,20 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="12">no records found for {{ event }} </td>
+                    <td colspan="12">No records found for {{ event }} </td>
                 </tr>
             {% endfor %}
 
         {% else %}
+            {% if noevents == true%}
+                <tr>
+                    <td colspan="12">No categories found</td>
+                </tr>
+            {% else %}
             <tr>
                 <td colspan="12">Not subscribed</td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

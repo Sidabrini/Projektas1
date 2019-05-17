@@ -47,4 +47,14 @@ class SubscribtionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByCategoryId($value)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.Category = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
