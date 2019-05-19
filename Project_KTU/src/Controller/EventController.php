@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\User;
 
 /**
@@ -74,12 +75,17 @@ class EventController extends AbstractController
             $entityManager->flush();
             foreach ($subscribers as $subscriber) {
                 $user = $userRepository->findById($subscriber->getUserId());
+                $url = $this->generateUrl(
+                    'event_show',
+                    ['id' => $event->getId()],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
                 $message = (new \Swift_Message('DD projektas'))
                     ->setFrom("DD.project@noreply.com")
                     ->setTo($user[0]->getEmail())
                     ->setBody(
                         "Prie jūsų prenumeruotos kategorijos: " . $event->getCategory()->getName(). ", buvo pridėtas renginys." .
-                        "\nRenginį galite pamatyti čia: http://localhost/naujas/Projektas1/Project_KTU/public/index.php/profile/event/". $event->getId(),
+                        "\nRenginį galite pamatyti čia: ".$url,
                         'text/plain'
                     );
                 $mailer->send($message);
