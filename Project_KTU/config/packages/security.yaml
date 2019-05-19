@@ -1,15 +1,12 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
     providers:
-        #in_memory: { memory: ~ }
-        users:
+        my_provider:
             entity:
-                class: 'App\Entity\User'
-                # the property to query by - e.g. username, email, etc
-                property: 'email'
-                # optional: if you're using multiple Doctrine entity
-                # managers, this option defines which one to use
-                # manager_name: 'customer'
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
